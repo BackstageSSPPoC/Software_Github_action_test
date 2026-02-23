@@ -29,10 +29,10 @@ jobs:
           password: ${{ secrets.GHCR_PAT }}
 
       - name: Build
-        run: docker build -t $IMAGE_NAME:${{ github.sha }} .
-
+        run: docker build -t $IMAGE_NAME:latest .
+      
       - name: Push
-        run: docker push $IMAGE_NAME:${{ github.sha }}
+        run: docker push $IMAGE_NAME:latest
 
       - name: Replace Image Tag
         run: |

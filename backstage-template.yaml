@@ -3,7 +3,7 @@ kind: Template
 metadata:
   name: github-actions-ci-cd-template
   title: GitHub Actions CI/CD Template
-  description: Create a service with GitHub Actions CI/CD and direct Kubernetes deployment
+  description: Create a service with GitHub Actions CI/CD and Kubernetes deployment
 
 spec:
   owner: development
@@ -18,13 +18,11 @@ spec:
         component_id:
           title: Component Name
           type: string
-          description: Provide a component (microservice) name
           pattern: '^([a-zA-Z][a-zA-Z0-9]*)(-[a-zA-Z0-9]+)*$'
 
         environment:
           title: Environment
           type: string
-          description: Deployment environment
           enum:
             - dev
             - prod
@@ -35,15 +33,11 @@ spec:
       action: fetch:template
       input:
         url: ./template
+        copyWithoutTemplating:
+          - .github/workflows/*
         values:
           app_name: ${{ parameters.component_id }}
           app_env: ${{ parameters.environment }}
-
-    - id: fetch-workflow
-      name: Fetch Workflow File
-      action: fetch:plain
-      input:
-        url: ./template/.github/workflow
 
     - id: publish
       name: Publish to GitHub
@@ -66,4 +60,3 @@ spec:
     links:
       - title: Repository
         url: ${{ steps.publish.output.remoteUrl }}
-        

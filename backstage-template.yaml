@@ -60,6 +60,4 @@ spec:
     links:
       - title: Repository
         url: ${{ steps.publish.output.remoteUrl }}
-      - title: Open in Catalog
-        url: ${{ steps.register.output.entityRef }}
         

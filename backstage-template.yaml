@@ -4,20 +4,23 @@ metadata:
   name: github-actions-ci-cd-template
   title: GitHub Actions CI/CD Template
   description: Create a service with GitHub Actions CI/CD and direct Kubernetes deployment
+
 spec:
-  owner: development
+  owner: group:default/development
   type: service
+
   parameters:
-    - title: Fill in some steps
+    - title: Service Configuration
       required:
         - component_id
         - environment
       properties:
         component_id:
-          title: Component name
+          title: Component Name
           type: string
           description: Provide a component (microservice) name
           pattern: '^([a-zA-Z][a-zA-Z0-9]*)(-[a-zA-Z0-9]+)*$'
+
         environment:
           title: Environment
           type: string
@@ -28,32 +31,32 @@ spec:
 
   steps:
     - id: fetch-base
-      name: Fetch Base
+      name: Fetch Base Template
       action: fetch:template
       input:
         url: ./template
         values:
-          app_name: ${{parameters.component_id}}
-          app_env: ${{parameters.environment}}
+          app_name: ${{ parameters.component_id }}
+          app_env: ${{ parameters.environment }}
 
     - id: publish
-      name: Publish
+      name: Publish to GitHub
       action: publish:github
       input:
+        repoUrl: github.com?owner=BackstageSSPPoC&repo=${{ parameters.component_id }}
         description: This is ${{ parameters.component_id }}
-        repoUrl: github.com?owner=BackstageSSPPoC&repo=${{parameters.component_id}}
-        protectDefaultBranch: false
         repoVisibility: public
+        protectDefaultBranch: false
+        defaultBranch: main
 
     - id: register
-      name: Register
+      name: Register in Catalog
       action: catalog:register
       input:
-        repoContentsUrl: ${{ steps['publish'].output.repoContentsUrl }}
-        catalogInfoPath: "/catalog-info.yaml"
-
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: catalog-info.yaml
 
   output:
     links:
       - title: Repository
-        url: ${{ steps['publish'].output.remoteUrl }}
+        url: ${{ steps.publish.output.remoteUrl }}

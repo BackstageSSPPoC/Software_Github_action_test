@@ -41,7 +41,7 @@ jobs:
       - name: Setup kubeconfig
         run: |
           echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > kubeconfig
-          export KUBECONFIG=$PWD/kubeconfig
+          echo "KUBECONFIG=$PWD/kubeconfig" >> $GITHUB_ENV
 
       - name: Apply
         run: kubectl apply -f k8s_manifest/

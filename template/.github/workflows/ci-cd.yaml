@@ -45,10 +45,19 @@ jobs:
           token: ${{ secrets.GHCR_PAT }}
           path: manifests
 
-      - name: Update Deployment Image
+      - name: Sync Kubernetes Manifests to GitOps Repo
         run: |
           SERVICE=${{ github.event.repository.name }}
-          sed -i "s|image:.*|image: $IMAGE_NAME:${{ github.sha }}|g" manifests/apps/$SERVICE/deployment.yaml
+          APP_DIR=manifests/apps/$SERVICE
+          
+          # Create service folder inside GitOps repo
+          mkdir -p $APP_DIR
+
+          # Copy template manifests from service repo
+          cp -r service/k8s_manifest/* $APP_DIR/
+
+          # Update image inside copied deployment.yaml
+          sed -i "s|image:.*|image: $IMAGE_NAME:${{ github.sha }}|g" $APP_DIR/deployment.yaml
 
       - name: Commit & Push Updated Manifest
         run: |

@@ -54,7 +54,7 @@ spec:
       action: catalog:register
       input:
         repoUrl: github.com?owner=BackstageSSPPoC&repo=${{ parameters.component_id }}
-        catalogInfoPath: catalog-info.yaml
+        catalogInfoPath: "/catalog-info.yaml"
 
   output:
     links:

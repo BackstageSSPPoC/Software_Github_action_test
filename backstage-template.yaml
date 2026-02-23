@@ -32,12 +32,18 @@ spec:
   steps:
     - id: fetch-base
       name: Fetch Base Template
-      action: fetch:plain
+      action: fetch:template
       input:
         url: ./template
         values:
           app_name: ${{ parameters.component_id }}
           app_env: ${{ parameters.environment }}
+
+    - id: fetch-workflow
+      name: Fetch Workflow File
+      action: fetch:plain
+      input:
+        url: ./template/.github/workflow
 
     - id: publish
       name: Publish to GitHub

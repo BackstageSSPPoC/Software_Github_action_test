@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: ${{ values.name }}
-          image: ghcr.io/BackstageSSPPoC/${{ values.name }}:IMAGE_TAG
+          image: ghcr.io/backstagessppoc/demo-test-15:IMAGE_TAG
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

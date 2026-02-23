@@ -24,7 +24,7 @@ spec:
         environment:
           title: Environment
           type: string
-          description: The environment where this component will be deployed
+          description: Deployment environment
           enum:
             - dev
             - prod
@@ -44,19 +44,21 @@ spec:
       action: publish:github
       input:
         repoUrl: github.com?owner=BackstageSSPPoC&repo=${{ parameters.component_id }}
-        description: This is ${{ parameters.component_id }}
+        description: Service ${{ parameters.component_id }}
         repoVisibility: public
-        protectDefaultBranch: false
         defaultBranch: main
+        protectDefaultBranch: false
 
     - id: register
       name: Register in Catalog
       action: catalog:register
       input:
-        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        repoUrl: github.com?owner=BackstageSSPPoC&repo=${{ parameters.component_id }}
         catalogInfoPath: catalog-info.yaml
 
   output:
     links:
       - title: Repository
         url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in Catalog
+        url: ${{ steps.register.output.entityRef }}

@@ -6,7 +6,7 @@ metadata:
   description: Create a service with GitHub Actions CI/CD and direct Kubernetes deployment
 
 spec:
-  owner: group:default/development
+  owner: development
   type: service
 
   parameters:
@@ -53,7 +53,7 @@ spec:
       name: Register in Catalog
       action: catalog:register
       input:
-        repoUrl: ${{ steps.publish.output.remoteUrl }}/blob/main/catalog-info.yaml
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
         catalogInfoPath: "/catalog-info.yaml"
 
   output:
@@ -62,3 +62,4 @@ spec:
         url: ${{ steps.publish.output.remoteUrl }}
       - title: Open in Catalog
         url: ${{ steps.register.output.entityRef }}
+        

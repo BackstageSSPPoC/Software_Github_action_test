@@ -32,7 +32,7 @@ spec:
   steps:
     - id: fetch-base
       name: Fetch Base Template
-      action: fetch:template
+      action: fetch:plain
       input:
         url: ./template
         values:
